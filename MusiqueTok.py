@@ -104,6 +104,7 @@ if not os.path.exists('vids'):
     os.mkdir('vids')
 
 video_paths = [os.path.join("vids", filename) for filename in os.listdir("vids") if os.path.isfile(os.path.join("vids", filename))]
+print(video_paths)
 
 for file in uploaded_files:
     # Save the Streamlit's uploaded file objects to the 'vids' directory.
