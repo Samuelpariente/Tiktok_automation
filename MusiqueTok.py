@@ -90,42 +90,39 @@ def download(url, video_paths):
     return result_video
 
 
-# Streamlit app
-def main():
-    st.title('Musique Tiktok Maker')
 
-    # Input URL
-    url = st.text_input('Enter the YouTube URL:')
+st.title('Musique Tiktok Maker')
 
-    # File uploader for multiple videos
-    uploaded_files = st.file_uploader("Choose videos", type=['mp4', 'mov', 'avi'], accept_multiple_files=True)
+# Input URL
+url = st.text_input('Enter the YouTube URL:')
 
-    # Create the 'vids' directory if it doesn't exist
-    if not os.path.exists('vids'):
-        os.mkdir('vids')
+# File uploader for multiple videos
+uploaded_files = st.file_uploader("Choose videos", type=['mp4', 'mov', 'avi'], accept_multiple_files=True)
 
-    video_paths = [os.path.join("vids", filename) for filename in os.listdir("vids") if os.path.isfile(os.path.join("vids", filename))]
+# Create the 'vids' directory if it doesn't exist
+if not os.path.exists('vids'):
+    os.mkdir('vids')
 
-    for file in uploaded_files:
-        # Save the Streamlit's uploaded file objects to the 'vids' directory.
-        tmp_path = f"vids/{file.name}"
-        video_paths.append(tmp_path)
-        with open(tmp_path, 'wb') as f:
-            f.write(file.getvalue())
+video_paths = [os.path.join("vids", filename) for filename in os.listdir("vids") if os.path.isfile(os.path.join("vids", filename))]
 
-    if len(video_paths) > 36:
-        video_paths = random.sample(video_paths, 36)
-    print(video_paths)
-    if st.button('Download and Process'):
-        try:
-            result = download(url, video_paths)
-            
-            # Offer the processed video for download
-            st.video(result.getvalue())
-            st.download_button(label="Download Video", data=result.getvalue(), file_name='output.mp4', mime='video/mp4')
-            
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+for file in uploaded_files:
+    # Save the Streamlit's uploaded file objects to the 'vids' directory.
+    tmp_path = f"vids/{file.name}"
+    video_paths.append(tmp_path)
+    with open(tmp_path, 'wb') as f:
+        f.write(file.getvalue())
 
-if __name__ == '__main__':
-    main()
+if len(video_paths) > 36:
+    video_paths = random.sample(video_paths, 36)
+print(video_paths)
+if st.button('Download and Process'):
+    try:
+        result = download(url, video_paths)
+        
+        # Offer the processed video for download
+        st.video(result.getvalue())
+        st.download_button(label="Download Video", data=result.getvalue(), file_name='output.mp4', mime='video/mp4')
+        
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+
